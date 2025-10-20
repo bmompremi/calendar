@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Open New Account - Haiti National Bank{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 2rem auto;">
+    <div class="card-header">Open a New Account</div>
+
+    <form method="POST" action="{{ url_for('create_account') }}">
+        <div class="form-group">
+            <label for="account_type">Account Type *</label>
+            <select class="form-control" id="account_type" name="account_type" required>
+                <option value="">Select account type</option>
+                <option value="checking">Checking Account</option>
+                <option value="savings">Savings Account</option>
+            </select>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Account Types:</strong><br><br>
+            <strong>Checking Account:</strong> Perfect for daily transactions and transfers. No minimum balance required.<br><br>
+            <strong>Savings Account:</strong> Ideal for saving money. Earn interest on your balance.
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Open Account</button>
+    </form>
+
+    <div class="text-center mt-2">
+        <a href="{{ url_for('accounts') }}">Back to My Accounts</a>
+    </div>
+</div>
+{% endblock %}

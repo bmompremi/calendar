@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}My Accounts - Haiti National Bank{% endblock %}
+
+{% block content %}
+<h1 style="color: var(--haiti-blue); margin-bottom: 2rem;">My Accounts</h1>
+
+<div class="card">
+    <div class="card-header">Active Accounts</div>
+
+    {% if accounts %}
+        {% for account in accounts %}
+            <div class="account-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <div class="account-number">{{ account.account_number }}</div>
+                        <p style="margin: 0.5rem 0; color: #6c757d;">
+                            {{ account.account_type|title }} Account
+                        </p>
+                        <p style="margin: 0; color: #6c757d; font-size: 0.9rem;">
+                            Opened: {{ account.created_at.strftime('%B %d, %Y') }}
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="balance">G {{ "%.2f"|format(account.balance) }}</div>
+                        <span class="badge badge-success">Active</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You don't have any accounts yet.</p>
+    {% endif %}
+
+    <div class="mt-2">
+        <a href="{{ url_for('create_account') }}" class="btn btn-primary">Open New Account</a>
+    </div>
+</div>
+{% endblock %}

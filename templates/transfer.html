@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Transfer Money - Haiti National Bank{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 700px; margin: 2rem auto;">
+    <div class="card-header">Transfer Money</div>
+
+    <form method="POST" action="{{ url_for('transfer') }}" id="transferForm">
+        <div class="form-group">
+            <label for="from_account_id">From Account *</label>
+            <select class="form-control" id="from_account_id" name="from_account_id" required>
+                <option value="">Select an account</option>
+                {% for account in accounts %}
+                    <option value="{{ account.id }}" data-balance="{{ account.balance }}">
+                        {{ account.account_number }} - {{ account.account_type|title }} (Balance: G {{ "%.2f"|format(account.balance) }})
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="to_account_number">To Account Number *</label>
+            <input type="text" class="form-control" id="to_account_number" name="to_account_number" required placeholder="Enter recipient account number">
+            <div id="accountInfo" style="margin-top: 0.5rem; color: var(--success-color); font-weight: bold;"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Amount (HTG) *</label>
+            <input type="number" class="form-control" id="amount" name="amount" step="0.01" min="1" required placeholder="0.00">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description (Optional)</label>
+            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter a description for this transfer"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Transfer Money</button>
+    </form>
+
+    <div class="alert alert-info mt-2">
+        <strong>Transfer Limits:</strong><br>
+        Minimum: G 1.00<br>
+        Maximum: G 1,000,000.00
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('to_account_number').addEventListener('blur', function() {
+    const accountNumber = this.value;
+    if (accountNumber.length > 0) {
+        fetch(`/api/account/${accountNumber}`)
+            .then(response => response.json())
+            .then(data => {
+                const infoDiv = document.getElementById('accountInfo');
+                if (data.success) {
+                    infoDiv.textContent = `Account holder: ${data.owner_name} (${data.account_type})`;
+                    infoDiv.style.color = 'var(--success-color)';
+                } else {
+                    infoDiv.textContent = 'Account not found';
+                    infoDiv.style.color = 'var(--danger-color)';
+                }
+            });
+    }
+});
+
+document.getElementById('transferForm').addEventListener('submit', function(e) {
+    const fromAccount = document.getElementById('from_account_id');
+    const selectedOption = fromAccount.options[fromAccount.selectedIndex];
+    const balance = parseFloat(selectedOption.getAttribute('data-balance'));
+    const amount = parseFloat(document.getElementById('amount').value);
+
+    if (amount > balance) {
+        e.preventDefault();
+        alert('Insufficient funds! Your balance is G ' + balance.toFixed(2));
+    }
+});
+</script>
+{% endblock %}
