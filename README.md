@@ -3,6 +3,15 @@
 
 A comprehensive banking management system with money transfer capabilities designed specifically for Haiti. This system supports both domestic and international money transfers with support for Haitian Gourde (HTG) and US Dollar (USD) currencies.
 
+## 🚀 Now with Neon Postgres Support!
+
+This system now includes **full database persistence** with [Neon](https://neon.tech) serverless Postgres:
+- ✅ **Cloud-based storage**: All data persisted in Neon Postgres
+- ✅ **Production-ready**: Auto-scaling serverless database
+- ✅ **Two versions available**: In-memory (for testing) and Database (for production)
+
+👉 **[See Neon Setup Guide](NEON_SETUP.md)** for database deployment instructions.
+
 ## Features
 
 ### Core Banking Features
@@ -35,23 +44,41 @@ A comprehensive banking management system with money transfer capabilities desig
 
 ## System Architecture
 
+### In-Memory Version (for testing/development)
 ```
-haiti-banking-system/
-├── config.py              # Configuration settings (currencies, limits, banks)
-├── models.py              # Data models (Customer, Account, Transaction)
-├── banking_system.py      # Core banking operations
-├── transfer_system.py     # Money transfer functionality
-├── main.py                # CLI interface
-├── demo.py                # Demo/testing script
-└── requirements.txt       # Python dependencies
+├── config.py              # Configuration settings
+├── models.py              # Data models
+├── banking_system.py      # Core banking (in-memory)
+├── transfer_system.py     # Transfer system (in-memory)
+├── main.py                # CLI interface (in-memory)
+└── demo.py                # Demo script (in-memory)
+```
+
+### Database Version (for production with Neon)
+```
+├── config.py              # Configuration settings
+├── models.py              # Data models
+├── database.py            # Neon Postgres connection
+├── schema.sql             # Database schema
+├── banking_system_db.py   # Core banking (database)
+├── transfer_system_db.py  # Transfer system (database)
+├── init_db.py             # Database initialization
+├── main_db.py             # CLI interface (database)
+├── demo_db.py             # Demo script (database)
+├── .env.example           # Environment template
+└── NEON_SETUP.md         # Neon setup guide
 ```
 
 ## Installation
 
 ### Prerequisites
 - Python 3.8 or higher
+- (Optional) A [Neon](https://neon.tech) account for database persistence
 
 ### Setup
+
+#### Option 1: In-Memory Version (Quick Start)
+
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -59,20 +86,66 @@ cd calendar
 
 # Install dependencies
 pip install -r requirements.txt
-```
 
-## Usage
+# Run the demo
+python demo.py
 
-### Running the CLI Application
-
-```bash
+# Or run the CLI
 python main.py
 ```
 
-### Running the Demo
+#### Option 2: Database Version with Neon (Production)
 
 ```bash
+# Clone the repository
+git clone <repository-url>
+cd calendar
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure database connection
+cp .env.example .env
+# Edit .env and add your Neon connection string
+
+# Initialize database
+python init_db.py
+
+# Run the demo
+python demo_db.py
+
+# Or run the CLI
+python main_db.py
+```
+
+**📖 For detailed Neon setup instructions, see [NEON_SETUP.md](NEON_SETUP.md)**
+
+## Usage
+
+### In-Memory Version
+
+```bash
+# CLI Application
+python main.py
+
+# Demo
 python demo.py
+```
+
+### Database Version (with Neon)
+
+```bash
+# Initialize database (first time only)
+python init_db.py
+
+# Test connection
+python init_db.py --test
+
+# CLI Application
+python main_db.py
+
+# Demo
+python demo_db.py
 ```
 
 The demo script demonstrates all features of the system including:
