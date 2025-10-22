@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Haiti National Bank{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to Haiti National Bank</h1>
+    <p>Your trusted partner for banking and money transfers in Haiti</p>
+    <p style="margin-top: 2rem;">
+        <a href="{{ url_for('register') }}" class="btn btn-primary" style="margin-right: 1rem;">Get Started</a>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary">Login</a>
+    </p>
+</div>
+
+<div class="stats-grid">
+    <div class="card">
+        <h3>Secure Banking</h3>
+        <p>Your money is safe with our advanced security measures and encryption technology.</p>
+    </div>
+    <div class="card">
+        <h3>Instant Transfers</h3>
+        <p>Send money to anyone in Haiti instantly with just an account number.</p>
+    </div>
+    <div class="card">
+        <h3>24/7 Access</h3>
+        <p>Access your accounts and make transactions anytime, anywhere.</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Why Choose Haiti National Bank?</div>
+    <ul style="line-height: 2;">
+        <li>Fast and secure money transfers</li>
+        <li>Multiple account types (Checking & Savings)</li>
+        <li>Complete transaction history</li>
+        <li>User-friendly interface</li>
+        <li>Built for the people of Haiti</li>
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Transaction History - Haiti National Bank{% endblock %}
+
+{% block content %}
+<h1 style="color: var(--haiti-blue); margin-bottom: 2rem;">Transaction History</h1>
+
+<div class="card">
+    <div class="card-header">All Transactions</div>
+
+    {% if transactions %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Date & Time</th>
+                    <th>Type</th>
+                    <th>From Account</th>
+                    <th>To Account</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td style="font-family: monospace; font-size: 0.85rem;">{{ transaction.transaction_id[:8] }}...</td>
+                    <td>{{ transaction.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>
+                        <span class="badge badge-info">{{ transaction.transaction_type|title }}</span>
+                    </td>
+                    <td>{{ transaction.from_account.account_number }}</td>
+                    <td>{{ transaction.to_account.account_number }}</td>
+                    <td style="font-weight: bold; {% if transaction.from_account.user_id == current_user.id %}color: var(--danger-color);{% else %}color: var(--success-color);{% endif %}">
+                        {% if transaction.from_account.user_id == current_user.id %}-{% else %}+{% endif %}G {{ "%.2f"|format(transaction.amount) }}
+                    </td>
+                    <td>{{ transaction.description or '-' }}</td>
+                    <td>
+                        <span class="badge badge-success">{{ transaction.status|title }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No transactions found.</p>
+    {% endif %}
+</div>
+
+<div class="text-center mt-2">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    <a href="{{ url_for('transfer') }}" class="btn btn-primary">Make a Transfer</a>
+</div>
+{% endblock %}
