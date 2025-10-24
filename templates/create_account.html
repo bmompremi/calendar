@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account - {{ BANK_NAME }}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Create New Account</h2>
+    <form method="POST" action="{{ url_for('create_account') }}">
+        <div class="form-group">
+            <label for="account_type">Account Type</label>
+            <select id="account_type" name="account_type" required>
+                <option value="">Select account type</option>
+                <option value="checking">Checking Account</option>
+                <option value="savings">Savings Account</option>
+            </select>
+        </div>
+
+        <div class="info-box">
+            <h4>Account Information</h4>
+            <ul>
+                <li>A unique account number will be automatically generated</li>
+                <li>Initial balance will be {{ CURRENCY_SYMBOL }} 0.00</li>
+                <li>You can create multiple accounts of different types</li>
+            </ul>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Account</button>
+        <a href="{{ url_for('accounts') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

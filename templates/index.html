@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - {{ BANK_NAME }}{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to {{ BANK_NAME }}</h1>
+    <p class="subtitle">Your trusted banking partner in Haiti</p>
+    <div class="hero-buttons">
+        <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+        <a href="{{ url_for('register') }}" class="btn btn-secondary">Register</a>
+    </div>
+</div>
+
+<div class="features">
+    <div class="feature-card">
+        <h3>Secure Transfers</h3>
+        <p>Send money securely to any account in Haiti</p>
+    </div>
+    <div class="feature-card">
+        <h3>Multiple Accounts</h3>
+        <p>Manage checking and savings accounts easily</p>
+    </div>
+    <div class="feature-card">
+        <h3>Transaction History</h3>
+        <p>Track all your transactions in real-time</p>
+    </div>
+    <div class="feature-card">
+        <h3>24/7 Access</h3>
+        <p>Access your accounts anytime, anywhere</p>
+    </div>
+</div>
+{% endblock %}

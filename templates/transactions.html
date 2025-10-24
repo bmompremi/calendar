@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Transactions - {{ BANK_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Transaction History</h2>
+</div>
+
+{% if transactions %}
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date & Time</th>
+                <th>Transaction ID</th>
+                <th>Type</th>
+                <th>From Account</th>
+                <th>To Account</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td class="transaction-id">{{ transaction.transaction_id[:8] }}...</td>
+                <td>{{ transaction.transaction_type|capitalize }}</td>
+                <td>{{ transaction.from_account.account_number }}</td>
+                <td>{{ transaction.to_account.account_number }}</td>
+                <td class="{% if transaction.from_account.user_id == current_user.id %} amount-negative{% else %} amount-positive{% endif %}">
+                    {% if transaction.from_account.user_id == current_user.id %}
+                        -{{ transaction.amount|currency }}
+                    {% else %}
+                        +{{ transaction.amount|currency }}
+                    {% endif %}
+                </td>
+                <td>{{ transaction.description or '-' }}</td>
+                <td>
+                    <span class="status-badge status-{{ transaction.status }}">
+                        {{ transaction.status|capitalize }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No transactions found.</p>
+    <a href="{{ url_for('transfer') }}" class="btn btn-primary">Make Your First Transfer</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Transfer Money - {{ BANK_NAME }}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Transfer Money</h2>
+
+    {% if accounts %}
+    <form method="POST" action="{{ url_for('transfer') }}" id="transferForm">
+        <div class="form-group">
+            <label for="from_account">From Account</label>
+            <select id="from_account" name="from_account" required>
+                <option value="">Select source account</option>
+                {% for account in accounts %}
+                <option value="{{ account.id }}" data-balance="{{ account.balance }}">
+                    {{ account.account_type|capitalize }} - {{ account.account_number }} ({{ account.balance|currency }})
+                </option>
+                {% endfor %}
+            </select>
+            <small id="balanceInfo" class="form-text"></small>
+        </div>
+
+        <div class="form-group">
+            <label for="to_account">To Account Number</label>
+            <input type="text" id="to_account" name="to_account" required
+                   placeholder="Enter recipient account number" maxlength="20">
+            <small id="accountInfo" class="form-text"></small>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Amount ({{ CURRENCY_SYMBOL }})</label>
+            <input type="number" id="amount" name="amount" step="0.01" min="1"
+                   max="1000000" required placeholder="0.00">
+            <small class="form-text">Min: {{ CURRENCY_SYMBOL }} 1.00 | Max: {{ CURRENCY_SYMBOL }} 1,000,000.00</small>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description (Optional)</label>
+            <input type="text" id="description" name="description"
+                   placeholder="Payment for..." maxlength="200">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Transfer Money</button>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+    {% else %}
+    <div class="empty-state">
+        <p>You need at least one account to make a transfer.</p>
+        <a href="{{ url_for('create_account') }}" class="btn btn-primary">Create Account</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Show balance when account is selected
+document.getElementById('from_account')?.addEventListener('change', function() {
+    const selected = this.options[this.selectedIndex];
+    const balance = selected.getAttribute('data-balance');
+    const balanceInfo = document.getElementById('balanceInfo');
+    if (balance) {
+        balanceInfo.textContent = `Available balance: {{ CURRENCY_SYMBOL }} ${parseFloat(balance).toFixed(2)}`;
+        balanceInfo.style.color = '#28a745';
+    }
+});
+
+// Verify account number
+document.getElementById('to_account')?.addEventListener('blur', async function() {
+    const accountNumber = this.value.trim();
+    const accountInfo = document.getElementById('accountInfo');
+
+    if (!accountNumber) {
+        accountInfo.textContent = '';
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/account/${accountNumber}`);
+        const data = await response.json();
+
+        if (data.success) {
+            accountInfo.textContent = `Account found: ${data.owner_name} (${data.account_type})`;
+            accountInfo.style.color = '#28a745';
+        } else {
+            accountInfo.textContent = 'Account not found';
+            accountInfo.style.color = '#dc3545';
+        }
+    } catch (error) {
+        accountInfo.textContent = 'Error verifying account';
+        accountInfo.style.color = '#dc3545';
+    }
+});
+
+// Validate transfer
+document.getElementById('transferForm')?.addEventListener('submit', function(e) {
+    const fromAccount = document.getElementById('from_account');
+    const amount = parseFloat(document.getElementById('amount').value);
+    const selected = fromAccount.options[fromAccount.selectedIndex];
+    const balance = parseFloat(selected.getAttribute('data-balance'));
+
+    if (amount > balance) {
+        e.preventDefault();
+        alert('Insufficient balance!');
+    }
+});
+</script>
+{% endblock %}

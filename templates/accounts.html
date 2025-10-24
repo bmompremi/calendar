@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Accounts - {{ BANK_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>My Accounts</h2>
+    <a href="{{ url_for('create_account') }}" class="btn btn-primary">Create New Account</a>
+</div>
+
+{% if accounts %}
+    <div class="account-list">
+        {% for account in accounts %}
+        <div class="account-item {% if not account.is_active %}inactive{% endif %}">
+            <div class="account-info">
+                <h3>{{ account.account_type|capitalize }} Account</h3>
+                <p><strong>Account Number:</strong> {{ account.account_number }}</p>
+                <p><strong>Balance:</strong> {{ account.balance|currency }}</p>
+                <p><strong>Status:</strong> {{ 'Active' if account.is_active else 'Inactive' }}</p>
+                <p><strong>Created:</strong> {{ account.created_at.strftime('%Y-%m-%d') }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <p>You don't have any accounts yet.</p>
+        <a href="{{ url_for('create_account') }}" class="btn btn-primary">Create Your First Account</a>
+    </div>
+{% endif %}
+{% endblock %}

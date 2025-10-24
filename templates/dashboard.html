@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - {{ BANK_NAME }}{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h2>Welcome, {{ current_user.first_name }}!</h2>
+
+    <div class="summary-cards">
+        <div class="summary-card">
+            <h3>Total Balance</h3>
+            <p class="balance">{{ total_balance|currency }}</p>
+        </div>
+        <div class="summary-card">
+            <h3>Active Accounts</h3>
+            <p class="balance">{{ accounts|length }}</p>
+        </div>
+    </div>
+
+    <div class="dashboard-section">
+        <h3>Your Accounts</h3>
+        {% if accounts %}
+            <div class="account-cards">
+                {% for account in accounts %}
+                <div class="account-card">
+                    <h4>{{ account.account_type|capitalize }} Account</h4>
+                    <p class="account-number">{{ account.account_number }}</p>
+                    <p class="account-balance">{{ account.balance|currency }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>You don't have any accounts yet. <a href="{{ url_for('create_account') }}">Create one now</a></p>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-section">
+        <h3>Recent Transactions</h3>
+        {% if recent_transactions %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in recent_transactions %}
+                    <tr>
+                        <td>{{ transaction.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ transaction.transaction_type|capitalize }}</td>
+                        <td>{{ transaction.from_account.account_number }}</td>
+                        <td>{{ transaction.to_account.account_number }}</td>
+                        <td class="{% if transaction.from_account.user_id == current_user.id %} amount-negative{% else %} amount-positive{% endif %}">
+                            {% if transaction.from_account.user_id == current_user.id %}
+                                -{{ transaction.amount|currency }}
+                            {% else %}
+                                +{{ transaction.amount|currency }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No transactions yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="quick-actions">
+        <a href="{{ url_for('transfer') }}" class="btn btn-primary">Transfer Money</a>
+        <a href="{{ url_for('create_account') }}" class="btn btn-secondary">Create Account</a>
+        <a href="{{ url_for('transactions') }}" class="btn btn-secondary">View All Transactions</a>
+    </div>
+</div>
+{% endblock %}
