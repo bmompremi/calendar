@@ -12,9 +12,10 @@ CURRENCIES = {
 DEFAULT_CURRENCY = 'HTG'
 
 # Exchange rates (HTG to other currencies)
+# Updated: October 23, 2025
 EXCHANGE_RATES = {
     'HTG': 1.0,
-    'USD': 0.0076  # Approximate rate: 1 USD = ~132 HTG
+    'USD': 0.007655  # Current rate: 1 USD = 130.64 HTG (Oct 2025)
 }
 
 # Transaction limits
