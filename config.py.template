@@ -1,0 +1,13 @@
+"""
+Configuration template for MiConsulado Booking Bot
+Copy this file to config.py and fill in your details
+"""
+
+# Login credentials
+EMAIL = "your.email@example.com"
+PASSWORD = "your_password_here"
+
+# Appointment details
+APPLICANT = "Full Name"
+SERVICE_TYPE = "passport_renewal"  # or other service type
+LOCATION = "San Francisco"  # Consulate location
