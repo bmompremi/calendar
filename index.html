@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Booking System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Appointment Booking System</h1>
+            <div class="nav-tabs">
+                <button class="tab-btn active" data-tab="booking">Book Appointment</button>
+                <button class="tab-btn" data-tab="manage">Manage Appointments</button>
+            </div>
+        </header>
+
+        <!-- Booking Tab -->
+        <div id="booking-tab" class="tab-content active">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button id="prevMonth" class="nav-btn">&lt;</button>
+                    <h2 id="currentMonth"></h2>
+                    <button id="nextMonth" class="nav-btn">&gt;</button>
+                </div>
+                <div class="calendar-grid">
+                    <div class="day-header">Sun</div>
+                    <div class="day-header">Mon</div>
+                    <div class="day-header">Tue</div>
+                    <div class="day-header">Wed</div>
+                    <div class="day-header">Thu</div>
+                    <div class="day-header">Fri</div>
+                    <div class="day-header">Sat</div>
+                    <div id="calendarDays"></div>
+                </div>
+            </div>
+
+            <div class="booking-form-container" id="bookingFormContainer" style="display: none;">
+                <h3>Book Appointment for <span id="selectedDate"></span></h3>
+
+                <div class="time-slots" id="timeSlots"></div>
+
+                <form id="appointmentForm">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="service">Service Type *</label>
+                        <select id="service" required>
+                            <option value="">Select a service</option>
+                            <option value="consultation">Consultation</option>
+                            <option value="follow-up">Follow-up</option>
+                            <option value="general">General Appointment</option>
+                            <option value="emergency">Emergency</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Additional Notes</label>
+                        <textarea id="notes" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Book Appointment</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBooking">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Manage Appointments Tab -->
+        <div id="manage-tab" class="tab-content">
+            <div class="appointments-header">
+                <h2>Your Appointments</h2>
+                <div class="filter-options">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+                    <button class="filter-btn" data-filter="past">Past</button>
+                </div>
+            </div>
+            <div id="appointmentsList" class="appointments-list"></div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

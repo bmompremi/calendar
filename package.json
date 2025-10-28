@@ -1,0 +1,17 @@
+{
+  "name": "appointment-booking-calendar",
+  "version": "1.0.0",
+  "description": "Appointment booking system with calendar interface",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["calendar", "appointments", "booking"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
